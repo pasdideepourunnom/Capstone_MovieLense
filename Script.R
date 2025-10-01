@@ -132,3 +132,13 @@ rm(movie_keep, user_keep)
 
 edx$rating <- as.factor(edx$rating)
 
+
+# Training and prediction ----
+
+# load special package for svm 
+if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org") 
+library(e1071)
+
+?svm # we are doing a classification 
+
+
