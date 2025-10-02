@@ -157,8 +157,22 @@ rating_matrix <- dcast(train1, userId ~ movieId, value.var="rating")
 #get rid of the userId column 
 rownames(rating_matrix) <- rating_matrix$userId
 rating_matrix$userId <- NULL
+length(is.na.data.frame(rating_matrix))
 # from df to realratingmatrix 
 rating_matrix <- as.matrix(rating_matrix)
 
 
+
 # Training and prediction ----
+
+## Item-based ----
+
+# simil function 
+
+## User-based ----
+
+## RMSEs 
+
+rmse <- function(predicted, observed){
+  sqrt(mean((predicted-observed)^2, na.rm = TRUE))
+}
