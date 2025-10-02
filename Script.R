@@ -67,15 +67,21 @@ edx <- rbind(edx, removed)
 rm(dl, ratings, movies, test_index, temp, movielens, removed)
 
 ##########################################################
+if(!require(dplyr)) install.packages("dplyr", repos = "http://cran.us.r-project.org")
+if(!require(reshape2)) install.packages("reshape2", repos = "http://cran.us.r-project.org")
+if(!require(proxy)) install.packages("proxy", repos = "http://cran.us.r-project.org")
 
+library(dplyr)
+library(reshape2)
+library(proxy)
 gc() # for better memory management, RStudio is not great at that 
 
 # A few statistics on the train set ----
 
 # describe data types of the different variables 
 summary(edx)
-length(unique(edx$movieId)) #10677 movie references
-length(unique(edx$userId)) #69878 users
+length(unique(edx$movieId)) # 10677 movie references
+length(unique(edx$userId)) # 69878 users
 length(unique(edx$genres)) # 797 COMBINATIONS of genres available
 
 # genres is treated as a character - not factor- and rating is treated as a num
@@ -128,17 +134,31 @@ gc()
 
 rm(movie_keep, user_keep)
 
-## Categorical conversion of target variable ----
+## Partitioning edx ----
 
-edx$rating <- as.factor(edx$rating)
+list_train <- createDataPartition(edx$rating, times=1, p = 0.8, list= TRUE)
+train_set <- edx[list_train$Resample1,]
+test_set <- edx[-list_train$Resample1,]
+
+rm(edx)
+gc()
+
+## Trying with a very small sample 
+
+users <- sample(unique(train_set$userId), 500)
+
+train1 <- train_set |> filter(userId %in% users)
+length(unique(train1$movieId))
+
+# rating matrix 
+
+#dcast is similar to pivot, definitely easier for larger datasets 
+rating_matrix <- dcast(train1, userId ~ movieId, value.var="rating") 
+#get rid of the userId column 
+rownames(rating_matrix) <- rating_matrix$userId
+rating_matrix$userId <- NULL
+# from df to realratingmatrix 
+rating_matrix <- as.matrix(rating_matrix)
 
 
 # Training and prediction ----
-
-# load special package for svm 
-if(!require(e1071)) install.packages("e1071", repos = "http://cran.us.r-project.org") 
-library(e1071)
-
-?svm # we are doing a classification 
-
-
