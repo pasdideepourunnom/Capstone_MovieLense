@@ -150,18 +150,16 @@ users <- sample(unique(train_set$userId), 500)
 train1 <- train_set |> filter(userId %in% users)
 length(unique(train1$movieId))
 
-# rating matrix 
+# rating matrix function 
 
-#dcast is similar to pivot, definitely easier for larger datasets 
-rating_matrix <- dcast(train1, userId ~ movieId, value.var="rating") 
-#get rid of the userId column 
-rownames(rating_matrix) <- rating_matrix$userId
-rating_matrix$userId <- NULL
-length(is.na.data.frame(rating_matrix))
-# from df to realratingmatrix 
-rating_matrix <- as.matrix(rating_matrix)
-
-
+ratmat <- function(df)
+{
+  mat <- dcast(df, userId ~ movieId, value.var="rating")
+  rownames(mat) <- mat$userId
+  mat$userId <- NULL
+  mat <- as.matrix(mat)
+  return(mat)
+}
 
 # Training and prediction ----
 
