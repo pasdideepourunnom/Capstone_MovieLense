@@ -70,10 +70,15 @@ rm(dl, ratings, movies, test_index, temp, movielens, removed)
 if(!require(dplyr)) install.packages("dplyr", repos = "http://cran.us.r-project.org")
 if(!require(reshape2)) install.packages("reshape2", repos = "http://cran.us.r-project.org")
 if(!require(proxy)) install.packages("proxy", repos = "http://cran.us.r-project.org")
+if(!require(ExPosition)) install.packages("ExPosition", repos = "http://cran.us.r-project.org")
+if(!require(recommenderlab)) install.packages("recommenderlab", repos = "http://cran.us.r-project.org")
+
 
 library(dplyr)
 library(reshape2)
 library(proxy)
+library(ExPosition)
+library(recommenderlab)
 gc() # for better memory management, RStudio is not great at that 
 
 # A few statistics on the train set ----
@@ -83,6 +88,11 @@ summary(edx)
 length(unique(edx$movieId)) # 10677 movie references
 length(unique(edx$userId)) # 69878 users
 length(unique(edx$genres)) # 797 COMBINATIONS of genres available
+
+length(unique(final_holdout_test$movieId)) # 10677 movie references
+length(unique(final_holdout_test$userId)) # 69878 users
+length(unique(final_holdout_test$genres)) # 797 COMBINATIONS of genres available
+
 
 # genres is treated as a character - not factor- and rating is treated as a num
 # even though it can only take ten different values in practice. 
@@ -101,8 +111,6 @@ movie_n <- edx |> group_by(movieId) |> summarise(n_rating = n()) |>
 
 # avg 843 sd 2238 
 
-length(unique(edx$rating)) # only 10 ratings possible
-# rating should be treated as a discrete variable. 
 
 # Preparing the training data set ----
 
@@ -134,11 +142,14 @@ gc()
 
 rm(movie_keep, user_keep)
 
+
+
+
 ## Partitioning edx ----
 
 # A rating matrix with our filtered set should have dimensions 19094 x 2124
 
-# rating matrix function 
+### rating matrix function ----
 # The same rating matrix can be used for both ubcf and ibcf 
 ratmat <- function(df)
 {
@@ -150,6 +161,17 @@ ratmat <- function(df)
 
 ratmat <- ratmat(edx)
 dim(ratmat)
+
+ratmat <- as(ratmat, "realRatingMatrix")
+
+ratmat <- normalize(ratmat, method = "center", row = TRUE)
+
+
+
+### Splitting by rows 
+
+
+
 
 # Training and prediction ----
 
