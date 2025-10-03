@@ -136,30 +136,20 @@ rm(movie_keep, user_keep)
 
 ## Partitioning edx ----
 
-list_train <- createDataPartition(edx$rating, times=1, p = 0.8, list= TRUE)
-train_set <- edx[list_train$Resample1,]
-test_set <- edx[-list_train$Resample1,]
-
-rm(edx)
-gc()
-
-## Trying with a very small sample 
-
-users <- sample(unique(train_set$userId), 500)
-
-train1 <- train_set |> filter(userId %in% users)
-length(unique(train1$movieId))
+# A rating matrix with our filtered set should have dimensions 19094 x 2124
 
 # rating matrix function 
-
+# The same rating matrix can be used for both ubcf and ibcf 
 ratmat <- function(df)
 {
   mat <- dcast(df, userId ~ movieId, value.var="rating")
   rownames(mat) <- mat$userId
   mat$userId <- NULL
   mat <- as.matrix(mat)
-  return(mat)
 }
+
+ratmat <- ratmat(edx)
+dim(ratmat)
 
 # Training and prediction ----
 
