@@ -164,9 +164,61 @@ dim(ratmat)
 
 ratmat <- as(ratmat, "realRatingMatrix")
 
-ratmat <- normalize(ratmat, method = "center", row = TRUE)
+gc()
+
+# users should not have less ratings than given 
+
+user_sample <- sample(1:19094, size = 5000, replace = FALSE )
+
+e <- evaluationScheme(ratmat[user_sample], method = "cross-validation", k =10, given = -1)
 
 
+
+
+ubcf_model <- function(k){
+  r1 <- Recommender(getData(e, "train"), "UBCF", param=list(nn=k))
+  p1 <- predict(r1, getData(e, "known"), type="ratings")
+  stats = calcPredictionAccuracy(p1, getData(e, "unknown"))
+  print(stats[1])
+}
+
+ibcf_model <- function(i){
+  r2 <- Recommender(getData(e, "train"), "IBCF", param=list(k=i))
+  p2 <- predict(r2, getData(e, "known"), type="ratings")
+  stats = calcPredictionAccuracy(p2, getData(e, "unknown"))
+  print(stats[1])
+}
+
+
+sapply(seq(600,1500,100), ubcf_model)
+
+sapply(seq(1, 50, 5), ubcf_model)
+
+r1 <- Recommender(getData(e, "train"), "UBCF", param = list(nn=20))
+p1 <- predict(r1, getData(e, "known"), type="ratings")
+UBCF <- calcPredictionAccuracy(p1, getData(e, "unknown"))
+
+r2 <- Recommender(getData(e, "train"), "SVD")
+
+p2 <- predict(r2, getData(e, "known"), type="ratings")
+
+SVD = calcPredictionAccuracy(p2, getData(e, "unknown"))
+
+r3 <- Recommender(getData(e, "train"), "POPULAR")
+
+p3 <- predict(r3, getData(e, "known"), type="ratings")
+
+POP = calcPredictionAccuracy(p3, getData(e, "unknown"))
+
+rm(p1,p2,p3, r1,r2,r3)
+
+
+
+models <- list("user-based CF" = list(name="UBCF", param=list(nn=3)),
+               "item-based CF" = list(name="IBCF", param=list(k=3)),
+               "popular items" = list(name="POPULAR", param=NULL))
+
+results <- evaluate(e, models, type = "ratings")
 
 ### Splitting by rows 
 
@@ -181,8 +233,3 @@ ratmat <- normalize(ratmat, method = "center", row = TRUE)
 
 ## User-based ----
 
-## RMSEs 
-
-rmse <- function(predicted, observed){
-  sqrt(mean((predicted-observed)^2, na.rm = TRUE))
-}
