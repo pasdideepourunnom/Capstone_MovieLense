@@ -5,26 +5,8 @@ date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+# Introduction 
 
-## R Markdown
+There is such a thing as too many options. As online platforms have allowed the gathering of hundreds to hundreds of thousands of references of products, users have been confronted to a new problem: being overwhelmed by the amount of options they have, sometimes to the point of just leaving the platform, without buying or consuming anything. Quite unproductive, especially for streaming companies whose revenues heavily depend on the amount of time users spend on the platform (from advertisement revenue). 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+To avoid this issue were introduced recommender systems. The goal was to present relevant references to users in order to advice and redirect people. It had the advantage to potentially increase sales, as even clients who knew exactly what they wanted could be given additional suggestions. 
