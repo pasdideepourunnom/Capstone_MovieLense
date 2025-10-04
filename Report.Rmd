@@ -7,6 +7,16 @@ output: pdf_document
 
 # Introduction 
 
-There is such a thing as too many options. As online platforms have allowed the gathering of hundreds to hundreds of thousands of references of products, users have been confronted to a new problem: being overwhelmed by the amount of options they have, sometimes to the point of just leaving the platform, without buying or consuming anything. Quite unproductive, especially for streaming companies whose revenues heavily depend on the amount of time users spend on the platform (from advertisement revenue). 
+There is such a thing as too many options. As online platforms have allowed the gathering of hundreds to hundreds of thousands of references of products, users have been confronted to a new problem: being overwhelmed by the amount of options they have, sometimes to the point of just leaving the platform, without buying or consuming anything. Quite unproductive, especially for streaming companies whose revenue heavily depends on the amount of time users spend on the platform. 
 
-To avoid this issue were introduced recommender systems. The goal was to present relevant references to users in order to advice and redirect people. It had the advantage to potentially increase sales, as even clients who knew exactly what they wanted could be given additional suggestions. 
+Recommender systems are one solution to this issue. The goal is to present relevant references to users in order to advice and redirect people. It has the advantage to potentially increase sales, as even clients who knew exactly what they wanted could be given additional suggestions. However, how can an algorithm predict what a user will like among available references? Users themselves do not always know exactly what they want. How can taste be described ? 
+
+The most commonly used methods for recommender algorithms are based on collaborative filtering, where the filtering of products is based on others - other users in user-based collaborative filtering (UBCF) and other items in item-based collaborative filtering (IBCF). 
+
+# Methods 
+
+# Results 
+
+# Conclusion 
+
+
